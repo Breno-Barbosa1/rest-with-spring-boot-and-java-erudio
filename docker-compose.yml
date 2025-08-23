@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+  db:
+    image: mysql:9.1.0
+    restart: always
+    environment:
+      TZ: America/Sao_Paulo
+      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: admin123
+      MYSQL_DATABASE: rest_with_spring_boot_erudio
+    ports:
+      - "3308:3306"
+    expose:
+      - 3306
+    networks:
+      - erudio_network
+  rest-with-springboot-erudio:
+    image: brenobarbosa088/rest-with-springboot-erudio
+    restart: always
+    build: ./rest-with-springboot-erudio
+    working_dir: /rest-with-springboot-erudio
+    environment:
+      TZ: America/Sao_Paulo
+      SPRING.DATASOURCE.URL: jdbc:mysql://db:3306/rest_with_spring_boot_erudio?useTimezone=true&serverTimezone=UTC
+      SPRING.DATASOURCE.USERNAME: root
+      SPRING.DATASOURCE.PASSWORD: admin123
+    command: mvn spring-boot:run
+    ports:
+      - 80:80
+    depends_on:
+      - db
+    networks:
+      - erudio_network
+networks:
+  erudio_network:
+    driver: bridge
