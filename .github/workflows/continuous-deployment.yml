@@ -28,11 +28,6 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Ensure ECR Login (Corrected)
-      run: |
-        aws ecr get-login-password --region ${{ secrets.AWS_DEFAULT_REGION }} | \
-        docker login --username AWS --password-stdin 829007908339.dkr.ecr.us-east-2.amazonaws.com
-
     - name: Java Setup
       uses: actions/setup-java@v4
       with:
