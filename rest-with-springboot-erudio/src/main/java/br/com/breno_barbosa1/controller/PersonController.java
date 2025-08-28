@@ -174,7 +174,7 @@ public class PersonController implements PersonControllerDocs {
         return service.update(person);
     }
 
-    @PatchMapping(value = "/{id}",
+    @PutMapping(value = "/{id}",
         produces = {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
