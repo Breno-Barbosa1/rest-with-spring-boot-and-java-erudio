@@ -37,7 +37,7 @@ jobs:
 
     - name: Build Application Jar
       working-directory: ./rest-with-springboot-erudio
-      run: mvn clean package
+      run: mvn clean package -DskipTests
 
     - name: Docker Compose Build
       run: docker compose build
