@@ -155,12 +155,14 @@ public class PersonService {
         logger.info("Updating one Person!");
 
         Person entity = repository.findById(person.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+            .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
         entity.setFirstName(person.getFirstName());
         entity.setLastName(person.getLastName());
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
+        entity.setProfileUrl(person.getProfileUrl());
+        entity.setPhotoUrl(person.getPhotoUrl());
 
         var dto = parseObject(repository.save(entity), PersonDTO.class);
         addHateoasLinks(dto);

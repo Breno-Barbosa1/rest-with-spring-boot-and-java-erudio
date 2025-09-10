@@ -1,7 +1,7 @@
 package br.com.breno_barbosa1.config;
 
 public interface TestConfigs {
-    int SERVER_PORT = 80;
+    int SERVER_PORT = 8080;
 
     String HEADER_PARAM_AUTHORIZATION = "Authorization";
     String HEADER_PARAM_ORIGIN = "Origin";

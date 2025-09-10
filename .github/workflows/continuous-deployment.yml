@@ -17,16 +17,13 @@ jobs:
         username: ${{secrets.DOCKER_USERNAME}}
         password: ${{secrets.DOCKER_ACCESS_TOKEN}}
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
+    - name: Login to Google Cloud Platform
+      uses: 'google-github-actions/auth@v3'
       with:
-        aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-        aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-        aws-region: us-east-2
+        credentials_json: ${{secrets.GOOGLE_CREDENTIALS}}
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
+    - name: Configure Docker Authentication for Google Cloud Artifact Registry
+      run: gcloud auth configure-docker us-central1-docker.pkg.dev
 
     - name: Java Setup
       uses: actions/setup-java@v4
@@ -42,13 +39,13 @@ jobs:
     - name: Docker Compose Build
       run: docker compose build
 
-    - name: Tag and Push Docker Image to Amazon Container Registry - ECR
+    - name: Push to Google Cloud Artifact Registry
       run: |
-        docker tag ${{secrets.DOCKER_USERNAME}}/rest-with-springboot-erudio:latest ${{secrets.IMAGE_REPO_URL}}:latest
-        docker tag ${{secrets.DOCKER_USERNAME}}/rest-with-springboot-erudio:latest ${{secrets.IMAGE_REPO_URL}}:${{ github.run_id }}
+        docker tag ${{secrets.DOCKER_USERNAME}}/rest-with-springboot-erudio:latest ${{secrets.REGISTRY_INFO}}/erudio-registry/rest-with-springboot-erudio:latest
+        docker tag ${{secrets.DOCKER_USERNAME}}/rest-with-springboot-erudio:latest ${{secrets.REGISTRY_INFO}}/erudio-registry/rest-with-springboot-erudio:${{ github.run_id }}
         
-        docker push ${{secrets.IMAGE_REPO_URL}}:latest
-        docker push ${{secrets.IMAGE_REPO_URL}}:${{github.run_id}}
+        docker push ${{secrets.REGISTRY_INFO}}/erudio-registry/rest-with-springboot-erudio:latest
+        docker push ${{secrets.REGISTRY_INFO}}/erudio-registry/rest-with-springboot-erudio:${{ github.run_id }}
 
     - name: Push to Docker Hub Container Registry
       run: |
